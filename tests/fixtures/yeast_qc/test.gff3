@@ -1,0 +1,16 @@
+##gff-version 3
+chrI	test	gene	1	100	.	+	.	ID=gene1
+chrI	test	exon	1	50	.	+	.	Parent=tx1
+chrI	test	exon	1	50	.	+	.	Parent=tx1_dup
+chrI	test	exon	1	50	.	-	.	Parent=tx2
+chrI	test	tRNA	200	250	.	+	.	ID=trna1
+chrI	test	snoRNA	300	320	.	-	.	ID=sno1
+chrII	test	gene	10	100	.	+	.	ID=gene2
+chrII	test	gene	200	300	.	-	.	ID=gene3
+chrII	test	exon	10	20	.	+	.	Parent=tx3
+chrII	test	exon	30	40	.	+	.	Parent=tx3
+chrII	test	exon	30	40	.	+	.	Parent=tx3_dup
+chrII	test	tRNA	400	430	.	+	.	ID=trna2
+chrM	test	snoRNA	5	25	.	+	.	ID=snoM
+chrUn	test	gene	1	10	.	+	.	ID=dropped_gene
+chrUn	test	exon	1	10	.	+	.	Parent=dropped_gene

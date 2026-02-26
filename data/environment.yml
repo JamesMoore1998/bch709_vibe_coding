@@ -2,6 +2,9 @@ name: gasch_heatmap
 channels:
   - conda-forge
 dependencies:
+  - python=3.11
+  - pandas
+  - gawk
   - r-base=4.3.*
   - r-readr
   - r-dplyr

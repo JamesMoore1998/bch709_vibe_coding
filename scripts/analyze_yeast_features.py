@@ -36,6 +36,7 @@ except Exception:  # pragma: no cover - optional dependency
 
 
 FEATURE_TYPES = ("gene", "exon", "tRNA", "snoRNA")
+EXON_LIKE_FEATURE_TYPES = {"exon", "noncoding_exon"}
 COUNT_COLUMNS = {
     "gene": "gene_count",
     "exon": "exon_count_unique",
@@ -153,6 +154,24 @@ def parse_gff3_counts(
     )
     seen_exons: Dict[str, Set[Tuple[int, int, str]]] = defaultdict(set)
     dropped_seqids: Set[str] = set()
+    valid_seqids_upper = {seqid.upper(): seqid for seqid in valid_seqids}
+
+    def resolve_seqid(seqid: str) -> Optional[str]:
+        if seqid in valid_seqids:
+            return seqid
+
+        s_upper = seqid.upper()
+        alias_candidates = {
+            "CHRMT": ("CHRM", "MT", "M"),
+            "CHRM": ("CHRMT", "MT", "M"),
+            "MT": ("CHRM", "CHRMT", "M"),
+            "M": ("CHRM", "CHRMT", "MT"),
+        }
+        for candidate_upper in alias_candidates.get(s_upper, ()):
+            if candidate_upper in valid_seqids_upper:
+                return valid_seqids_upper[candidate_upper]
+
+        return None
 
     with open_text(gff3_path) as fh:
         for line_num, line in enumerate(tqdm(fh, desc="Parsing GFF3"), start=1):
@@ -164,10 +183,11 @@ def parse_gff3_counts(
                 warnings.warn(f"Skipping malformed GFF3 line {line_num} (expected 9 cols).")
                 continue
 
-            seqid, _source, feature_type, start_s, end_s, _score, strand, _phase, _attrs = cols
+            raw_seqid, _source, feature_type, start_s, end_s, _score, strand, _phase, _attrs = cols
+            seqid = resolve_seqid(raw_seqid)
 
-            if seqid not in valid_seqids:
-                dropped_seqids.add(seqid)
+            if seqid is None:
+                dropped_seqids.add(raw_seqid)
                 continue
 
             try:
@@ -185,7 +205,7 @@ def parse_gff3_counts(
 
             if feature_type == "gene":
                 counts[seqid]["gene_count"] += 1
-            elif feature_type == "exon":
+            elif feature_type in EXON_LIKE_FEATURE_TYPES:
                 # Unique exon counting per chromosome avoids overcounting duplicated rows.
                 exon_key = (start, end, strand)
                 if exon_key not in seen_exons[seqid]:

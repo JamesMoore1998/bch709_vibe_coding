@@ -1,0 +1,4 @@
+chromosome,chromosome_length_bp,gene_count,exon_count_unique,tRNA_count,snoRNA_count,gene_density_per_mb,exon_density_per_mb,tRNA_density_per_mb,snoRNA_density_per_mb
+chrI,1000,1,2,1,1,1000.0,2000.0,1000.0,1000.0
+chrII,2000,2,2,1,0,1000.0,1000.0,500.0,0.0
+chrM,500,0,0,0,1,0.0,0.0,0.0,2000.0
