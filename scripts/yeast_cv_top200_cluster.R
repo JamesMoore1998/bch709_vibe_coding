@@ -126,7 +126,13 @@ parse_condition_meta <- function(label) {
 
   display_label <- clean
   if (condition_type == "heat_shock") {
-    display_label <- sprintf("HS %sC %sm%s", end_temp_C, time_min, rep_tag)
+    if (!is.na(replicate) && replicate == "hs-1") {
+      display_label <- sprintf("HS 37->25C %sm%s", time_min, rep_tag)
+    } else if (!is.na(replicate) && replicate == "hs-2") {
+      display_label <- sprintf("HS 25->37C %sm%s", time_min, rep_tag)
+    } else {
+      display_label <- sprintf("HS %sC %sm%s", end_temp_C, time_min, rep_tag)
+    }
   } else if (condition_type == "downshift") {
     display_label <- sprintf("Downshift %s->%s %sm", start_temp_C, end_temp_C, time_min)
   } else if (condition_type == "upshift") {
@@ -289,7 +295,7 @@ grid::grid.draw(ph$gtable)
 grid::grid.text(
   "Condition / timepoint",
   x = grid::unit(0.5, "npc"),
-  y = grid::unit(0.015, "npc"),
+  y = grid::unit(0.01, "npc"),
   gp = grid::gpar(fontsize = 10)
 )
 dev.off()
