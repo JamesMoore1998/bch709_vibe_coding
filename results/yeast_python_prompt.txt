@@ -1,0 +1,32 @@
+Help me write a prompt to give to GitHub copilot. I need to run it in my bch709_vibe_coding conditions environment. I will need packages: pandas, lumpy, matplotlib, seaborn, bio python, tqdm. We will have a GFF3 file containing feature counts (genes, exons, tRNAs, snoRNAs) from the Saccharomyces cerevisiae (yeast). I need to answer the following question(s): Homework 1 (Python): Yeast mRNA FASTA Analysis + GC Distribution Graph
+
+Research Question
+
+What is the GC content distribution of yeast mRNA sequences, and are there distinct GC-content subpopulations?
+Problem Description
+
+Extract sequence information from the UCSC yeast (Saccharomyces cerevisiae) mRNA FASTA file (mrna.fa.gz), analyze GC content distribution, and produce a summary table and distribution graph.
+
+Objective
+
+Write a prompt detailed enough to produce the desired result in one shot. You may iterate to fix errors, but your goal is a single, well-crafted prompt that works on the first try.
+Input Data
+
+# Yeast mRNA FASTA
+curl -L -o data/mrna.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/sacCer3/bigZips/mrna.fa.gz
+
+Expected Output
+
+Output	Specification
+results/mrna_metrics.tsv	accession, length, gc_content (4 decimals, sorted by gc_content desc)
+results/gc_content_distribution.png	Histogram (1600×900 px, dpi 200)
+Plot specifications:
+
+X-axis: GC content (0–1)
+Histogram with density curve overlay
+Mean and median as vertical dashed lines
+Caption showing n, mean, median, sd
+Grading Criteria
+
+
+Push all files to your bch709_vibe_coding GitHub repo. Include your prompt (as a comment at the top of your script or in a separate prompt.txt), the generated script, and the output files. Write your interpretation as a comment in the script or in the README.md.
